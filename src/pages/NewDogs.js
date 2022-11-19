@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 
 export default function NewDogs() {
   const [data, setData] = useState({});
+  const [img, setImg] = useState([]);
+
   return (
     <>
+      <img src={'https://storage.cloud.google.com/my-test-23453345/214818e8-f904-40e4-9b2a-3b240f55baa1.jpg'} />
       <h1>Add a new dog</h1>
       <Form>
         <Form.Group className='mb-3' controlId='formBasicEmail'>

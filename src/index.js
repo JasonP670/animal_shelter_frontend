@@ -8,23 +8,51 @@ import Layout from './pages/Layout';
 import NewDogs from './pages/NewDogs';
 import NoPage from './pages/NoPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AdminLayout from './admin/Layout';
+import AdminDogs from './admin/Dog';
+import AdminDogsNew from './admin/NewDog';
+import AdminCats from './admin/Cat';
+
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import MuiPicker from './MuiPicker';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='blogs' element={<Blogs />} />
-          <Route path='contact' element={<Contact />} />
-          <Route path='newdog' element={<NewDogs />} />
-          <Route path='*' element={<NoPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+  if (window.location.host.split('.')[0] === 'admin') {
+    return (
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<AdminLayout />}>
+              {/* <Route index element={<AdminDogs />} /> */}
+
+              <Route path='/dogs' element={<AdminDogs />} />
+              <Route path='/dogs/new' element={<AdminDogsNew />} />
+
+              <Route path='/cats' element={<AdminCats />} />
+              <Route path='*' element={<NoPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </LocalizationProvider>
+    );
+  } else {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path='blogs' element={<Blogs />} />
+            <Route path='contact' element={<Contact />} />
+            <Route path='newdog' element={<NewDogs />} />
+            <Route path='*' element={<NoPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    );
+  }
 }
 
 root.render(<App />);
