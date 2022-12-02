@@ -3,14 +3,30 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link, Outlet } from 'react-router-dom';
 
 export default function Layout() {
+  const linkStyle = {
+    color: 'inherit',
+    'text-decoration': 'inherit',
+  };
   return (
     <>
       <Navbar bg='dark' variant='dark' expand='lg'>
         <Container>
           <Nav className='me-auto'>
-            <Nav.Link href='/dogs'>Dogs</Nav.Link>
-            <Nav.Link href='/dogs/new'>New Dog</Nav.Link>
-            <Nav.Link href='/cats'>Cats</Nav.Link>
+            <Nav.Link>
+              <Link style={linkStyle} to={'/dogs'}>
+                Dogs
+              </Link>
+            </Nav.Link>
+            <Nav.Link>
+              <Link style={linkStyle} to='/dogs/new'>
+                New Dog
+              </Link>
+            </Nav.Link>
+            <Nav.Link>
+              <Link style={linkStyle} to='/cats'>
+                Cats
+              </Link>
+            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -19,24 +35,4 @@ export default function Layout() {
       </Container>
     </>
   );
-
-  // return (
-
-  //   <>
-  //     <nav>
-  //       <ul>
-  //         <li>
-  //           <Link to='/dogs'>Dogs</Link>
-  //         </li>
-  //         <li>
-  //           <Link to='/dogs/new'>New Dog</Link>
-  //         </li>
-  //         <li>
-  //           <Link to='/cats'>Cats</Link>
-  //         </li>
-  //       </ul>
-  //     </nav>
-  //     <Outlet />
-  //   </>
-  // );
 }

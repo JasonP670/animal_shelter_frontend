@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
-import { getRequest } from '../utils';
 import { Button as Btn, Card, CardActionArea, CardActions, CardContent, Typography } from '@mui/material';
 import useFetch from '../utils/useFetch';
 import { Alert } from 'react-bootstrap';
 
 export default function Dog() {
-  const { loading, error, value } = useFetch(`http://localhost:3030/api/v1/cats`, {}, []);
+  const { loading, error, value } = useFetch(`http://localhost:3030/api/v1/dogs`, {}, []);
 
   const handleClick = (e) => {
     console.log('clicked!');
@@ -34,14 +32,15 @@ export default function Dog() {
         </Card>
       ));
     } else {
-      return <div>No dogs found</div>;
+      return <Alert variant='warning'>No dogs found in the database.</Alert>;
     }
   };
 
-  return (
-    <>
-      {error ? <Alert>{error}</Alert> : null}
-      {loading ? <div>Loading</div> : dogCardBuilder()}
-    </>
-  );
+  if (loading) {
+    return <div>Loading...</div>;
+  } else if (error) {
+    return <Alert variant='danger'>{error}</Alert>;
+  }
+
+  return dogCardBuilder();
 }
