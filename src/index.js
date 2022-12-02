@@ -15,11 +15,11 @@ import AdminCats from './admin/Cat';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import MuiPicker from './MuiPicker';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 export default function App() {
+  // Admin Site
   if (window.location.host.split('.')[0] === 'admin') {
     return (
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -39,6 +39,7 @@ export default function App() {
       </LocalizationProvider>
     );
   } else {
+    // Customer site
     return (
       <BrowserRouter>
         <Routes>
