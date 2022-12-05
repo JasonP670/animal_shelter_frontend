@@ -43,13 +43,10 @@ export default function NewDogs() {
           Submit
         </Button>
       </Form>
+      <form method='POST' action='/api/v1/dogs/upload' encType='multipart/form-data'>
+        <input type='file' name='image' />
+        <input type='submit' />
+      </form>
     </>
   );
-}
-
-// <form method='POST' action='/api/v1/dogs/upload' encType='multipart/form-data'>
-{
-  /* <input type='file' name='image' />
-<input type='submit' />
-</form> */
 }

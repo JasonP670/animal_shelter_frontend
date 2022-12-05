@@ -1,95 +1,42 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import MuiPicker from '../MuiPicker';
-import axios from 'axios';
-import { postRequest } from '../utils';
+import React from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
+import MuiPicker from '../components/MuiPicker';
+import useForm from '../utils/useForm';
 
-export default function NewDog({ children }) {
-  const [data, setData] = useState({ name: '', intakeDate: new Date(), gender: -1, size: -1, color: '', breed: '', housetrained: -1 });
-  const [error, setError] = useState('');
+export default function NewDog() {
+  const { error, values, handleChange, handleSubmit, handleDateChange, handleImageChange } = useForm({
+    callback: submit,
+    initValues: {
+      name: '',
+      gender: '',
+      breed: '',
+      size: '',
+      color: '',
+      housetrained: '',
+      intakeDate: '',
+    },
+  });
 
-  const handleDateChange = (e) => {
-    let d = { ...data };
-    d.intakeDate = e;
-    setData(d);
-  };
-
-  const handleChangeStrings = (value, e) => {
-    let d = { ...data, [value]: e.target.value };
-    setData(d);
-  };
-
-  const handleChangeInts = (value, e) => {
-    let d = { ...data, [value]: parseInt(e.target.value) };
-    setData(d);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(data);
-
-    const [valid, err] = validateData();
-    if (err) {
-      setError(err);
-      return;
-    }
-
-    if (valid && !err) {
-      const response = await postRequest('dogs', data);
-      console.log(response);
-      if (response.error) {
-        console.log(`ERROR: ${response.error}`);
-        return;
-      }
-      console.log(`SUCCESS: ${response.res.id}`);
-    }
-  };
-
-  const validateData = () => {
-    const d = data;
-    if (!d.name) {
-      return [false, 'Please enter a name.'];
-    }
-
-    if (d.gender === -1) {
-      return [false, 'Please select a gender.'];
-    }
-
-    if (!d.breed) {
-      return [false, 'Please enter a breed.'];
-    }
-
-    if (d.size === -1) {
-      return [false, 'Please select a size.'];
-    }
-
-    if (!d.color) {
-      return [false, 'Please enter a color.'];
-    }
-
-    if (d.housetrained === -1) {
-      return [false, 'Please select if housetrained.'];
-    }
-
-    if (!d.intakeDate) {
-      return [false, 'Please select an intake date.'];
-    }
-
-    return [true, null];
-  };
+  function submit() {
+    console.log(values);
+  }
 
   return (
     <>
-      {error && <div>{error}</div>}
+      {error && <Alert variant='danger'>{error} Not Submitted.</Alert>}
       <Form onSubmit={handleSubmit}>
+        <Form.Group controlId='formFile' className='mb-3'>
+          <Form.Label>File Upload</Form.Label>
+          <Form.Control type='file' name='image' onChange={handleImageChange} />
+        </Form.Group>
         <Form.Group className='mb-3'>
           <Form.Label>Name</Form.Label>
-          <Form.Control type='text' placeholder="Dog's name" onChange={(e) => handleChangeStrings('name', e)} value={data.name} />
+          <Form.Control type='text' name='name' placeholder="Dog's name" onChange={handleChange} value={values.name} />
         </Form.Group>
 
         <Form.Group className='mb-3'>
           <Form.Label>Gender</Form.Label>
-          <Form.Select aria-label='Gender' onChange={(e) => handleChangeInts('gender', e)}>
+          <Form.Select aria-label='Gender' name='gender' onChange={handleChange}>
             <option>Please select the dog's gender</option>
             <option value='1'>Male</option>
             <option value='2'>Female</option>
@@ -98,12 +45,12 @@ export default function NewDog({ children }) {
 
         <Form.Group className='mb-3'>
           <Form.Label>Breed</Form.Label>
-          <Form.Control type='text' placeholder="Dog's breed" onChange={(e) => handleChangeStrings('breed', e)} value={data.breed} />
+          <Form.Control type='text' placeholder="Dog's breed" name='breed' onChange={handleChange} value={values.breed} />
         </Form.Group>
 
         <Form.Group className='mb-3'>
           <Form.Label>Size</Form.Label>
-          <Form.Select aria-label='Size' onChange={(e) => handleChangeInts('size', e)} value={data.size}>
+          <Form.Select aria-label='Size' name='size' onChange={handleChange} value={values.size}>
             <option>Please select the size</option>
             <option value='1'>Small</option>
             <option value='2'>Medium</option>
@@ -114,12 +61,12 @@ export default function NewDog({ children }) {
 
         <Form.Group className='mb-3'>
           <Form.Label>Color</Form.Label>
-          <Form.Control type='text' placeholder="Dog's Color" value={data.color} onChange={(e) => handleChangeStrings('color', e)} />
+          <Form.Control type='text' name='color' placeholder="Dog's Color" value={values.color} onChange={handleChange} />
         </Form.Group>
 
         <Form.Group className='mb-3'>
           <Form.Label>Housetrained</Form.Label>
-          <Form.Select aria-label='House Trained' onChange={(e) => handleChangeInts('housetrained', e)}>
+          <Form.Select aria-label='House Trained' name='housetrained' onChange={handleChange}>
             <option>Please select an option</option>
             <option value='0'>No</option>aa
             <option value='1'>Yes</option>
@@ -129,7 +76,7 @@ export default function NewDog({ children }) {
 
         <Form.Group className='mb-3'>
           <Form.Label>Intake Date</Form.Label>
-          <MuiPicker selectedDate={data.intakeDate} handleDateChange={handleDateChange} />
+          <MuiPicker selectedDate={values.intakeDate} name='intakeDate' handleChange={handleDateChange} />
         </Form.Group>
 
         <Button type='submit'>Submit</Button>
